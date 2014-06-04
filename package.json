@@ -1,0 +1,31 @@
+{
+  "name": "webrtcdemochat",
+  "version": "0.0.1",
+  "description": "demo rtc",
+  "main": "web.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+      "webrtc.io": "latest",
+      "webrtc.io-client": "latest",
+      "express": "~3.4.x",
+      "ws": "latest",
+      "hogan-express": "~0.5.2",
+      "hogan-template-compiler": "~2.0.0"
+  },
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.3.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/heroku/webrtcdemochat"
+  },
+  "keywords": [
+    "node",
+    "heroku"
+  ],
+  "author": "Claudio Rodriguez",
+  "license": "BSD"
+}
