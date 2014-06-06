@@ -28,6 +28,22 @@
         ];
         var audios = [];
         var cursound = [];
+        var nots = [];
+        var cursnot = [];
+        var x = 0;
+
+        var dataURI;
+        for (x = -12; x <= 13; x++) {
+            dataURI = Notes.getDataURI(x, {styleFn: DataGenerator.style.squareWave});
+            nots[x] = [
+                new Audio(dataURI),
+                new Audio(dataURI),
+                new Audio(dataURI),
+                new Audio(dataURI),
+                new Audio(dataURI)
+            ];
+            cursnot[x] = 0;
+        }
 
         keys.forEach(function(el){
             var key = el.key;
@@ -49,5 +65,154 @@
             audios[key][cur].play();
             cursound[key] = ++cur % audios[key].length;
         }
+
+        function playNote(note) {
+            var cur = cursnot[note];
+            nots[note][cur].pause();
+            nots[note][cur].play();
+            cursnot[note] = ++cur % nots[note].length;
+        }
+
+        var chopsticks = (function() {
+            var data = [
+                {
+                    'style': 'wave',
+                    'volume': 'linearFade',
+                    'notesOffset': 0
+                }
+            ];
+
+            var main = [
+                [6, -7, -5],
+                [6, -7, -5],
+                [6, -7, -5],
+                [6, -7, -5],
+                [6, -7, -5],
+                [6, -7, -5],
+
+                [6, -8, -5],
+                [6, -8, -5],
+                [6, -8, -5],
+                [6, -8, -5],
+                [6, -8, -5],
+                [6, -8, -5],
+
+                [6, -10, -1],
+                [6, -10, -1],
+                [6, -10, -1],
+                [6, -10, -1],
+                [6, -10, -1],
+                [6, -10, -1],
+
+                [6, -12, 0],
+                [6, -12, 0],
+                [6, -12, 0]
+            ];
+
+            data.push.apply(data, main);
+            data.push(
+                    [6, -12, 0],
+                    [6, -10, -1],
+                    [6, -8, -3]
+            );
+            data.push.apply(data, main);
+            data.push(
+                    [6, -12, 0],
+                    [6, -5],
+                    [6, -8],
+
+                    [6, -12],
+                    [12]
+            );
+
+            var main2 = [
+                [6, 0, 4],
+                [6, -1, 2],
+                [6],
+
+                [6, -3, 0],
+                [6, -5, -1],
+                [6],
+
+                [6, -7, -3],
+                [6, -8, -5],
+                [6],
+
+                [6, 0, 4],
+                [6, 0, 4],
+                [6],
+
+                [6, -8, -5],
+                [6, -10, -7],
+                [6],
+
+                [6, -1, 2],
+                [6, -1, 2],
+                [6]
+            ];
+            data.push.apply(data, main2);
+            data.push(
+                    [6, -10, -7],
+                    [6, -12, -8],
+                    [6],
+
+                    [6, -8, 0],
+                    [6, -8, 0],
+                    [6]
+            );
+            data.push.apply(data, main2);
+            data.push(
+                    [6, -5, -1],
+                    [6, -8, 0],
+                    [6, -5],
+
+                    [6, -8],
+                    [6, -12],
+                    [6]
+            );
+            return data;
+        })();
+
+
+        var demoing = false, demoingTimeout, notesOffset;
+        function demo(data) {
+            var cfg = data[0];
+            if (!demoing) {
+                demoing = true;
+                cfg.style && (DataGenerator.style.default = DataGenerator.style[cfg.style]);
+                cfg.volume && (DataGenerator.volume.default = DataGenerator.volume[cfg.volume]);
+                cfg.notesOffset !== undefined && (notesOffset = cfg.notesOffset);
+
+                    //NOTE - jQuery.map flattens arrays
+                    var i = 0, song = $.map(data, function(x, i) { return i == 0 ? null : [x]; });
+                    (function play() {
+                        if (!demoing) return;
+                        if (i >= song.length) { i = 0; }
+                        var part = song[i++];
+                        if (part) {
+                            var delay = part[0];
+                            demoingTimeout = window.setTimeout(function() {
+                                demoing && play();
+                                for (var j=1, len=part.length; j<len; j++) {
+                                    playNote(part[j]);
+                                }
+                            }, delay*50);
+                        }
+                    })();
+            }
+        }
+
+        function demoHandler(evt) {
+            if (evt.keyCode == 77) {
+                if (demoing) {
+                    demoing = false;
+                    window.clearTimeout(demoingTimeout);
+                } else {
+                    demo(chopsticks);
+                }
+            }
+        }
+
+        $(window).keyup(demoHandler);
     });
 </script>
