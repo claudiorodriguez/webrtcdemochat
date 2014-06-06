@@ -1,0 +1,76 @@
+#keyboard {
+    width: 100%;
+    height: 100%;
+}
+
+#keyboard .key {
+    width: 120px;
+    box-sizing: border-box;
+    height: 120px;
+    float: left;
+    cursor: pointer;
+    margin: 10px;
+}
+
+#keyboard .key.a {
+    background: #f00;
+}
+#keyboard .key.b {
+    background: #d00;
+}
+#keyboard .key.c {
+    background: #b00;
+}
+#keyboard .key.d {
+    background: #900;
+}
+#keyboard .key.e {
+    background: #700;
+}
+#keyboard .key.f {
+    background: #500;
+}
+#keyboard .key.g {
+    background: #300;
+}
+
+
+#keyboard:after, #log:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+#log {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+#log li {
+    float: left;
+    height: 50px;
+    width: 50px;
+}
+
+#log li.a {
+    background: #f00;
+}
+#log li.b {
+    background: #d00;
+}
+#log li.c {
+    background: #b00;
+}
+#log li.d {
+    background: #900;
+}
+#log li.e {
+    background: #700;
+}
+#log li.f {
+    background: #500;
+}
+#log li.g {
+    background: #300;
+}

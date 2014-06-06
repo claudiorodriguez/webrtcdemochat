@@ -1,0 +1,26 @@
+<section id="keyboard">
+    <div data-key="a" class="key a"></div>
+    <div data-key="b" class="key b"></div>
+    <div data-key="c" class="key c"></div>
+    <div data-key="d" class="key d"></div>
+    <div data-key="e" class="key e"></div>
+    <div data-key="f" class="key f"></div>
+    <div data-key="g" class="key g"></div>
+</section>
+
+<script type="text/javascript">
+    $(function(){
+        var pubnub = PUBNUB.init({
+            subscribe_key : "{{pubnub_key}}",
+            publish_key : "{{pubnub_publish_key}}"
+        });
+
+        $('[data-key]').on('click', function(e) {
+            var key = $(this).attr('data-key');
+            pubnub.publish({
+                channel : "keyboard",
+                message : {key: key}
+            });
+        });
+    });
+</script>

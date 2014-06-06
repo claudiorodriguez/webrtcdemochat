@@ -9,15 +9,29 @@ app.set('layout', 'layouts/layout');
 app.enable('view cache');
 app.engine('html', require('hogan-express'));
 
-app.use('/public', express.static(__dirname + '/public'));
+app.locals.pubnub_key = process.env.PUBNUB_SUBSCRIBE_KEY;
+app.locals.pubnub_publish_key = process.env.PUBNUB_PUBLISH_KEY;
 
-var port = process.env.PORT || 8080;
+app.use('/public', express.static(__dirname + '/public'));
+app.get('/favicon.ico', function(req,res) {
+    res.sendfile(__dirname + '/public/favicon.ico');
+});
+
+var port = process.env.PORT || 5000;
 server.listen(port);
 
 
 
 app.get('/', function(req, res) {
     res.render('index');
+});
+
+app.get('/music/sender', function(req,res){
+    res.render('sender', {layout: 'layouts/music'});
+});
+
+app.get('/music/receiver', function(req,res){
+    res.render('receiver', {layout: 'layouts/music'});
 });
 
 

@@ -1,0 +1,53 @@
+<section id="speaker"></section>
+<ul id="log"></ul>
+
+<script type="text/javascript">
+    $(function(){
+        var pubnub = PUBNUB.init({
+            subscribe_key : "{{pubnub_key}}",
+            publish_key : "{{pubnub_publish_key}}"
+        });
+
+        pubnub.subscribe({
+            channel : "keyboard",
+            message : function(m){
+                var key = m.key;
+                $('#log').prepend($('<li>').addClass(key));
+                playKey(key);
+            }
+        });
+
+        var keys = [
+            {key: 'a', i: -12},
+            {key: 'b', i: -10},
+            {key: 'c', i: -8},
+            {key: 'd', i: -7},
+            {key: 'e', i: -5},
+            {key: 'f', i: -3},
+            {key: 'g', i: -1}
+        ];
+        var audios = [];
+        var cursound = [];
+
+        keys.forEach(function(el){
+            var key = el.key;
+            var i = el.i;
+            var dataURI = Notes.getDataURI(i);
+            audios[key] = [
+                new Audio(dataURI),
+                new Audio(dataURI),
+                new Audio(dataURI),
+                new Audio(dataURI),
+                new Audio(dataURI)
+            ];
+            cursound[key] = 0;
+        });
+
+        function playKey(key) {
+            var cur = cursound[key];
+            audios[key][cur].pause();
+            audios[key][cur].play();
+            cursound[key] = ++cur % audios[key].length;
+        }
+    });
+</script>
