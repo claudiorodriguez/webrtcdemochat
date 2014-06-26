@@ -34,6 +34,10 @@ app.get('/music/receiver', function(req,res){
     res.render('receiver', {layout: 'layouts/music'});
 });
 
+app.get('/kaltura/spoofer', function(req,res){
+    res.render('spoofer', {layout: 'layouts/kaltura'});
+});
+
 
 webRTC.rtc.on('chat_msg', function(data, socket) {
     var roomList = webRTC.rtc.rooms[data.room] || [];

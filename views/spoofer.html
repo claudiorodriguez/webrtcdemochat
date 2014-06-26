@@ -1,0 +1,103 @@
+<section id="form">
+    entries: <textarea id="entry">1_79r532j3,1_m8z04wr2,1_2qvtohvm,1_rpzta2w9,1_gj6nozox,1_bdkc63q4,1_jzmosxoy,1_sol4xztg,1_xk0oyrx8,1_rct007dx,1_pv3e3ash,1_xba2rn4c,1_06bdge0m,1_dq0wk5ue,1_50mrvaqd,1_13zxmxfw,1_s10khs5e</textarea><br />
+    durations: <textarea id="durations">2352,134,2950,528,832,3539,161,164,118,31,66,122,237,69,72,607,3888</textarea><br />
+    desired #: <input type="text" id="desired" /><br />
+    <input type="button" id="start">
+</section>
+
+<section id="log"></section>
+
+
+<script type="text/javascript">
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+$(function(){
+    $('#start').on('click', function(){
+        $.ajax({
+            url: 'http://stats.kaltura.com/api_v3/?service=session&action=start&secret=68ebcb00d035b7e641114323f9db745c&type=2&partnerId=1164832',
+            type: 'GET',
+            dataType: 'xml',
+            data: {
+                service: 'session',
+                action: 'start',
+                secret: '68ebcb00d035b7e641114323f9db745c',
+                type: 2,
+                partnerId: 1164832
+            }
+        })
+        .done(function( data ) {
+            var ks = $(data).find('result').text();
+            var entries = $('#entry').val().split(",");
+            var durations = $('#durations').val().split(",");
+            var current = 0;
+            var desired = Math.floor($('#desired').val()) || 1000;
+            var x, y;
+            if (ks && entries.length) {
+                setInterval(function(){
+                    if (current < desired) {
+                        for (x=1; x<=10; x++) {
+                            current++;
+                            $('#log').text(current + '/' + desired);
+
+                            var ind = getRandomInt(0, entries.length - 1);
+                            var entry_id = entries[ind];
+                            var duration = durations[ind];
+
+                            var dice = getRandomInt(1,100);
+                            var stage = 7;
+                            if (dice < 10) stage = 2;
+                            else if (dice >= 10 && dice < 30) stage = 4;
+                            else if (dice >= 30 && dice < 70) stage = 5;
+                            else if (dice >= 70 && dice < 95) stage = 6;
+                            else stage = 7;
+
+                            for (y = 1; y <= stage; y++) {
+                                var data = {
+                                    ks: ks,
+                                    service: "stats",
+                                    action: "collect",
+                                    "event:objectType": "KalturaStatsEvent",
+                                    "event:eventType": y,
+                                    "event:entryId": entry_id,
+                                    "event:clientVer": "2.10",
+                                    "event:eventTimestamp": new Date().getTime(),
+                                    //"event:sessionId": "3688812e-c3a2-3266-9932-f7ffdb55f35a",
+                                    //"event:isFirstInSession": false,
+                                    "event:partnerId": 1164832,
+                                    "event:widgetId": "_1164832",
+                                    "event:uiconfId": 21165911,
+                                    "event:currentPoint": 0,
+                                    "event:duration": duration,
+                                    "event:seek": false,
+                                    "event:referrer": "http%3A%2F%2Fwww.fansworld.tv",
+                                    ignoreNull: 1,
+                                    format: 9
+                                    //expiry: 86400,
+                                    //kalsig: "58204ed8f4e77c981fa36c932bfd4dbd",
+                                    //callback: "kapi_5c22e287aa8d3937cccc90bd47a52f19"
+                                };
+
+
+                                $.ajax({
+                                    url: "http://stats.kaltura.com/api_v3/index.php",
+                                    type: "GET",
+                                    data: data,
+                                    dataType: "xml"
+                                })
+                                        .done(function( data ) {
+                                            console.log(data);
+                                        });
+                            }
+                        }
+                    }
+                }, 5000);
+            }
+        });
+
+
+    });
+});
+
+</script>
