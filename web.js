@@ -34,6 +34,14 @@ app.get('/music/receiver', function(req,res){
     res.render('receiver', {layout: 'layouts/music'});
 });
 
+app.get('/tetris/sender', function(req,res){
+  res.render('tetris/sender', {layout: 'layouts/tetris'});
+});
+
+app.get('/tetris/receiver', function(req,res){
+  res.render('tetris/receiver', {layout: 'layouts/tetris'});
+});
+
 app.get('/kaltura/spoofer', function(req,res){
     res.render('spoofer', {layout: 'layouts/kaltura'});
 });

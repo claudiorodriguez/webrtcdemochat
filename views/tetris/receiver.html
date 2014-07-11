@@ -1,0 +1,179 @@
+<script type="text/javascript" src="/public/teto.js"></script>
+
+<div class="container">
+  <div id="game-start"><h1>Untitled game</h1>
+    <table id="controls" cellpadding="0" cellspacing="0" width="100%">
+      <tbody>
+      <tr>
+        <td>Right arrow</td>
+        <td>Move right</td>
+      </tr>
+      <tr>
+        <td>Left arrow</td>
+        <td>Move left</td>
+      </tr>
+      <tr>
+        <td>Up arrow</td>
+        <td>Rotate</td>
+      </tr>
+      <tr>
+        <td>Down arrow</td>
+        <td>Move down</td>
+      </tr>
+      <tr>
+        <td>Space</td>
+        <td>Fast drop</td>
+      </tr>
+      <tr>
+        <td>P</td>
+        <td>Pause</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div id="game-loading"></div>
+  <script>$('#game-loading').text('Game loading...')
+  </script>
+  <noscript>
+    <div class="error">Error! Your web browser has Javascript disabled.
+    </div>
+  </noscript>
+  <div style="display:none" class="status-container">
+    <table border="0" cellpadding="5">
+      <tbody>
+      <tr>
+        <td colspan="2" align="center" width="100">
+          <div id="preview"></div>
+        </td>
+      </tr>
+      <tr>
+        <td>Level</td>
+        <td>
+          <div id="level"></div>
+        </td>
+      </tr>
+      <tr>
+        <td>Score</td>
+        <td>
+          <div id="score"></div>
+        </td>
+      </tr>
+      <tr>
+        <td>Lines</td>
+        <td>
+          <div id="lines"></div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="display:none" class="game-container">
+    <div id="game" style="width:300px; height: 600px;" class="game"></div>
+    <div id="menu" class="overlay"></div>
+  </div>
+</div>
+<audio id="collapse1-sound" src="/public/sounds/beep1.mp3?v=1c10d81" preload="auto"></audio>
+<audio id="collapse2-sound" src="/public/sounds/beep2.mp3?v=958dfbd" preload="auto"></audio>
+<audio id="collapse3-sound" src="/public/sounds/beep3.mp3?v=69c77c3" preload="auto"></audio>
+<audio id="collapse4-sound" src="/public/sounds/beep4.mp3?v=22284c6" preload="auto"></audio>
+<div class="container">
+  <div id="game-start2"><h1>Untitled game</h1>
+    <table id="controls2" cellpadding="0" cellspacing="0" width="100%">
+      <tbody>
+      <tr>
+        <td>Right arrow</td>
+        <td>Move right</td>
+      </tr>
+      <tr>
+        <td>Left arrow</td>
+        <td>Move left</td>
+      </tr>
+      <tr>
+        <td>Up arrow</td>
+        <td>Rotate</td>
+      </tr>
+      <tr>
+        <td>Down arrow</td>
+        <td>Move down</td>
+      </tr>
+      <tr>
+        <td>Space</td>
+        <td>Fast drop</td>
+      </tr>
+      <tr>
+        <td>P</td>
+        <td>Pause</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div id="game-loading2"></div>
+  <script>$('#game-loading2').text('Game loading...')</script>
+  <noscript>
+    <div class="error">Error! Your web browser has Javascript disabled.</div>
+  </noscript>
+  <div style="display:none" class="status-container">
+    <table border="0" cellpadding="5">
+      <tbody>
+      <tr>
+        <td colspan="2" align="center" width="100">
+          <div id="preview2"></div>
+        </td>
+      </tr>
+      <tr>
+        <td>Level</td>
+        <td>
+          <div id="level2"></div>
+        </td>
+      </tr>
+      <tr>
+        <td>Score</td>
+        <td>
+          <div id="score2"></div>
+        </td>
+      </tr>
+      <tr>
+        <td>Lines</td>
+        <td>
+          <div id="lines2"></div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="display:none" class="game-container">
+    <div id="game2" style="width:300px; height: 600px;" class="game"></div>
+    <div id="menu2" class="overlay"></div>
+  </div>
+  <audio id="collapse1-sound2" src="/public/sounds/beep1.mp3?v=1c10d81" preload="auto"></audio>
+  <audio id="collapse2-sound2" src="/public/sounds/beep2.mp3?v=958dfbd" preload="auto"></audio>
+  <audio id="collapse3-sound2" src="/public/sounds/beep3.mp3?v=69c77c3" preload="auto"></audio>
+  <audio id="collapse4-sound2" src="/public/sounds/beep4.mp3?v=22284c6" preload="auto"></audio>
+</div>
+
+<script type="text/javascript">
+$(function(){
+  var pubnub = PUBNUB.init({
+    subscribe_key : "{{pubnub_key}}",
+    publish_key : "{{pubnub_publish_key}}"
+  });
+
+  pubnub.subscribe({
+    channel : "tetris",
+    message : function(m){
+      switch(m.key) {
+        case 'left':
+          fakePlayer._game.move(-1,0);
+          break;
+        case 'right':
+          fakePlayer._game.move(1,0);
+          break;
+        case 'rotate':
+          fakePlayer._game.rotate();
+          break;
+      }
+    }
+  });
+
+});
+</script>

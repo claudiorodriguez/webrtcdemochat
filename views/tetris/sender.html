@@ -1,0 +1,26 @@
+<section id="keys">
+  <div data-key="left" class="key left"></div>
+  <div data-key="rotate" class="key rotate"></div>
+  <div data-key="right" class="key right"></div>
+</section>
+
+<script type="text/javascript">
+  $(function(){
+    var pubnub = PUBNUB.init({
+      subscribe_key : "{{pubnub_key}}",
+      publish_key : "{{pubnub_publish_key}}"
+    });
+
+    $('[data-key]:not(.disabled)').on('click', function(e) {
+      var key = $(this).attr('data-key');
+      $('[data-key]').addClass('disabled');
+      setTimeout(function(){
+        $('[data-key]').removeClass('disabled');
+      }, 2000);
+      pubnub.publish({
+        channel : "tetris",
+        message : {key: key}
+      });
+    });
+  });
+</script>
