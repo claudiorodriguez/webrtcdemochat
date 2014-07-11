@@ -11,7 +11,7 @@
       publish_key : "{{pubnub_publish_key}}"
     });
 
-    $('[data-key]:not(.disabled)').on('click', function(e) {
+    $(document).on('click', '[data-key]:not(.disabled)', function(e) {
       var key = $(this).attr('data-key');
       $('[data-key]').addClass('disabled');
       setTimeout(function(){
